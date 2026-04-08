@@ -60,7 +60,7 @@ h1, h2 {
     font-weight: 700; 
     font-size: 1.2rem; 
     border-radius: 30px; 
-    background-color: #1E90FF; 
+    background-color: #1b7ee1; 
     color: #FFFFFF;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s, transform 0.1s;
@@ -68,7 +68,7 @@ h1, h2 {
 
 .btn-primary:hover,
     .btn-primary:focus {
-        background-color: #f50057; 
+        background-color: #b20f1f; 
         transform: scale(1.05); 
     }
 
