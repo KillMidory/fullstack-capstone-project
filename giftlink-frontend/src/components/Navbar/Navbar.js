@@ -1,4 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
+//useNavigate
+//import {urlConfig} from '../../config';
+//import { useAppContext } from '../../context/AuthContext';
 
 export default function Navbar() {
     return (
@@ -12,6 +16,9 @@ export default function Navbar() {
                     </li>
                     <li className="nav-item">
                         <a className="nav-link" href="/app">Gifts</a>
+                    </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/app/search">Search</Link>
                     </li>
                 </ul>
             </div>
