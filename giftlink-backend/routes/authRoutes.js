@@ -8,8 +8,6 @@ const router = express.Router();
 const dotenv = require('dotenv');
 const pino = require('pino');  
 
-//Step 1 - Task 3: Create a Pino logger instance
-const { body, validationResult } = require('express-validator');
 const logger = pino();  
 
 dotenv.config();
@@ -30,7 +28,7 @@ router.post('/register', async (req, res) => {
 		const salt = await bcryptjs.genSalt(10);
         const hash = await bcryptjs.hash(req.body.password, salt);
 		const email = req.body.email;
-        console.log('email is',email);
+        
 		const newUser = await collection.insertOne({
             email: req.body.email,
             firstName: req.body.firstName,
