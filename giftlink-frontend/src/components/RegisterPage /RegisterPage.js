@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import './RegisterPage.css';
 
 function RegisterPage() {
@@ -6,10 +7,40 @@ function RegisterPage() {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showerr, setShowerr] = useState(""); //Task 4
+    //Task 5
+    const navigate = useNavigate();
+    const { setIsLoggedIn } = useAppContext();
 
     const handleRegister = async () => {
         console.log("Register invoked")
-    }
+        const response = await fetch(`${urlConfig.backendUrl}/api/auth/register`, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({
+              firstName: firstName,
+              lastName: lastName,
+              email: email,
+              password: password,
+            }),
+        });
+
+        const json = await response.json();//Step 2 - Task 1
+        //Step 2 - Task 2
+        if (json.authtoken) {  //Step 2 - Task 2
+            sessionStorage.setItem("auth-token", json.authtoken);
+            sessionStorage.setItem("name", firstName);
+            sessionStorage.setItem("email", json.email);
+            setIsLoggedIn(true); //Step 2 - Task 3
+            navigate("/app"); //Step 2 - Task 4
+        }
+        if (json.error) {
+            //Step 2 - Task 5
+            setShowerr(json.error);
+        }
+    };
 
     return (
         <div className="container mt-5">
@@ -51,6 +82,8 @@ function RegisterPage() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
+                            {/* Step 2 - Task 6*/}
+                            <div className="text-danger">{showerr}</div>
                         </div>
                         <div className="mb-4">
                             <label htmlFor="password" className="form-label">Password</label>
