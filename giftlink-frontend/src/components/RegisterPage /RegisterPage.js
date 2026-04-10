@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import {urlConfig} from '../../config';
+import { useAppContext } from '../../context/AuthContext';
 import './RegisterPage.css';
 
 function RegisterPage() {
@@ -13,7 +15,6 @@ function RegisterPage() {
     const { setIsLoggedIn } = useAppContext();
 
     const handleRegister = async () => {
-        console.log("Register invoked")
         const response = await fetch(`${urlConfig.backendUrl}/api/auth/register`, {
             method: "POST",
             headers: {
@@ -28,6 +29,8 @@ function RegisterPage() {
         });
 
         const json = await response.json();//Step 2 - Task 1
+        console.log('json data', json);
+		console.log('er', json.error);
         //Step 2 - Task 2
         if (json.authtoken) {  //Step 2 - Task 2
             sessionStorage.setItem("auth-token", json.authtoken);
