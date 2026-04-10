@@ -1,4 +1,6 @@
 import React, { createContext, useState, useContext } from 'react';
+import { useAppContext } from '../../context/AuthContext';
+
 
 const AppContext = createContext();
 
