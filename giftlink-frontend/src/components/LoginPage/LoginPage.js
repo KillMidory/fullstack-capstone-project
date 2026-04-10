@@ -1,12 +1,55 @@
 import React, { useState } from 'react';
+import {urlConfig} from '../../config';
+import { useAppContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 
 function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const handleLogin = async () => {
-        console.log("Inside handleLogin");
-	}
+	const [incorrect, setIncorrect] = useState('');
+	const navigate = useNavigate();
+    const bearerToken = sessionStorage.getItem('bearer-token');
+    const { setIsLoggedIn } = useAppContext();
+
+	useEffect(() => {
+        if (sessionStorage.getItem('auth-token')) {
+          navigate('/app')
+        }
+      }, [navigate])
+	
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        const res = await fetch(`${urlConfig.backendUrl}/api/auth/login`, {
+            method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'Authorization': bearerToken ? `Bearer ${bearerToken}` : '', 
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          })
+        });
+
+        const json = await res.json();
+        console.log('Json',json);
+        if (json.authtoken) {
+          sessionStorage.setItem('auth-token', json.authtoken);
+          sessionStorage.setItem('name', json.userName);
+          sessionStorage.setItem('email', json.userEmail);
+          setIsLoggedIn(true);
+          navigate('/app');
+        } else {
+          document.getElementById("email").value="";
+          document.getElementById("password").value="";
+          setIncorrect("Wrong password. Try again.");
+          setTimeout(() => {
+            setIncorrect("");
+          }, 2000);
+        }
+
+      }
 	
     return (
         <div className="container mt-5">
@@ -35,6 +78,7 @@ function LoginPage() {
                                 value={password}
                                 onChange={(e) => {setPassword(e.target.value);setIncorrect("")}}
                             />
+                            {/*Step 2: Task 6*/}
                             <span style={{color:'red',height:'.5cm',display:'block',fontStyle:'italic',fontSize:'12px'}}>{incorrect}</span>
                         </div>
                         <button className="btn btn-primary w-100 mb-3" onClick={handleLogin}>Login</button>
